@@ -66,6 +66,9 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = 'core.User'
+# settings.py
+CORS_ALLOW_ALL_ORIGINS = True  # For development; tighten in production
 
 WSGI_APPLICATION = 'WEB_APPLICATION.wsgi.application'
 
