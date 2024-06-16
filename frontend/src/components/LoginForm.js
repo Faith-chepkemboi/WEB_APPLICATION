@@ -1,9 +1,6 @@
-// LoginForm.js
-
 import React from 'react';
-
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 import '../style.css';  
-
 
 const LoginForm = () => {
     return (
@@ -20,6 +17,9 @@ const LoginForm = () => {
                 </div>
                 <button type="submit" className="btn">Login</button>
             </form>
+            <p className="register-link">
+                Not registered? <Link to="/register">Register here</Link>
+            </p>
         </div>
     );
 };

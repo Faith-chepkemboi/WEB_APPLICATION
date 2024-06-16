@@ -1,6 +1,6 @@
-// src/components/RegisterForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../style.css';  
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -24,12 +24,24 @@ const RegisterForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input type="text" name="username" placeholder="Username" onChange={handleChange} />
-            <input type="email" name="email" placeholder="Email" onChange={handleChange} />
-            <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-            <button type="submit">Register</button>
-        </form>
+        <div className="register-container">
+            <h2>Register</h2>
+            <form onSubmit={handleSubmit} className="register-form">
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" onChange={handleChange} />
+                </div>
+                <button type="submit" className="btn">Register</button>
+            </form>
+        </div>
     );
 };
 
