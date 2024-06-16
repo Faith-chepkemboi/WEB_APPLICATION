@@ -19,6 +19,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/core/api/token/', formData);
+      console.log("respomse".response)
       const accessToken = response.data.access;
 
       // Decode the access token
@@ -27,7 +28,14 @@ const LoginForm = () => {
 
       // Check if the decoded email matches the form data email
       if (decodedToken.email !== formData.email) {
-        setErrors({ email: 'Email not registered' });
+        setErrors({ email: 'Email is not registered' });
+        return;
+      }
+      if (decodedToken.username !== formData.username) {
+        setErrors({ username: 'Invalid username' });
+        return;
+      }else{
+        setErrors(response);
         return;
       }
 

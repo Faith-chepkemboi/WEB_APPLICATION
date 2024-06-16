@@ -18,21 +18,30 @@ def register_user(request):
         return Response({'id': user.id, 'username': user.username, 'email': user.email}, status=201)
     return Response(serializer.errors, status=400)
 # login function that calls backened@api_view(['POST'])
+@api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
     email = request.data.get('email')
     password = request.data.get('password')
-    user = authenticate(request, username=email, password=password)
+    username = request.data.get('username')
+
+    if not email or not password or not username:
+        return Response({'detail': 'Please provide email, username, and password'}),
+
+
+    user = authenticate(request, username=username, password=password,email=email)
+    
+
     if user is not None:
         login(request, user)
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user_id': user.id, 'email': user.email})
+        # Return success response with token or any other data
+        return Response({'detail': 'Login successful'})
     else:
-        return Response({'detail': 'Invalid credentials'}, status=400)
-
-# core/views.py
-
-
+        # Return error response if authentication fails
+        return Response({'detail': 'Invalid email or password'}, status=400)
+    
+    
+    
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
