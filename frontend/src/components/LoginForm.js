@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
-import '../style.css'; // Import your CSS file for Login component
+import { jwtDecode } from "jwt-decode";
+
+
+
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -19,7 +22,19 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/core/api/token/', formData);
-      localStorage.setItem('accessToken', response.data.access);
+      console.log("response ",response)
+      const accessToken = response.data.access;
+      console.log(" accessToken",accessToken)
+      const decodedToken = jwtDecode(accessToken);
+      console.log("decoded token",decodedToken)
+      
+
+      if (decodedToken.email !== formData.email) {
+        setErrors({ email: 'incorrect email' });
+        return;
+      }
+
+      localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', response.data.refresh);
       setErrors({});
       history.push('/dashboard');  // Redirect to dashboard after successful login
@@ -33,46 +48,43 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="form-group">
-          <label htmlFor="username">Username:</label>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
           <input
             type="text"
-            id="username"
             name="username"
             value={formData.username}
             onChange={handleChange}
           />
-          {errors.username && <div className="error-message">{errors.username}</div>}
+          {errors.username && <div style={{ color: 'red' }}>{errors.username}</div>}
         </div>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
+        <div>
+          <label>Email:</label>
           <input
             type="email"
-            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
           />
-          {errors.email && <div className="error-message">{errors.email}</div>}
+          {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
+        <div>
+          <label>Password:</label>
           <input
             type="password"
-            id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
           />
-          {errors.password && <div className="error-message">{errors.password}</div>}
+          {errors.password && <div style={{ color: 'red' }}>{errors.password}</div>}
         </div>
-        <button type="submit" className="btn">Login</button>
+        <button type="submit">Login</button>
       </form>
-      {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
-      <p className="register-link">
+      {errors.non_field_errors && <div style={{ color: 'red' }}>{errors.non_field_errors}</div>}
+      <p>
         Not registered? <Link to="/register">Register here</Link>
       </p>
     </div>

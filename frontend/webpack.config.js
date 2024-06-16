@@ -5,6 +5,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    crypto: require.resolve('crypto-browserify')
+
   },
   module: {
     rules: [
