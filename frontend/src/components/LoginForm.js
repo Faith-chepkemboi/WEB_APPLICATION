@@ -27,7 +27,7 @@ const LoginForm = () => {
 
       // Check if the decoded email matches the form data email
       if (decodedToken.email !== formData.email) {
-        setErrors({ email: 'Email does not match the token email' });
+        setErrors({ email: 'Email not registered' });
         return;
       }
 
