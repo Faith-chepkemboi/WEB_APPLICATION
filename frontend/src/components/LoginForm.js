@@ -1,50 +1,25 @@
-// components/LoginForm.js
+// LoginForm.js
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+
+import '../style.css';  
+
 
 const LoginForm = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Implement your login logic here (e.g., API call, validation)
-        console.log('Form submitted with:', formData);
-        // Reset form fields after submission (optional)
-        setFormData({
-            email: '',
-            password: ''
-        });
-    };
-
     return (
-        <div>
+        <div className="login-container">
             <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email:</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+            <form className="login-form">
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input type="email" id="email" name="email" />
                 </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input type="password" id="password" name="password" />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" className="btn">Login</button>
             </form>
-            <p>
-                Don't have an account? <Link to="/register">Register here</Link>
-            </p>
         </div>
     );
 };
