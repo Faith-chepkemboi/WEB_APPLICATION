@@ -1,52 +1,84 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 import axios from 'axios';
-import '../style.css';  // Import your CSS file for styling
+import '../style.css'; // Import the CSS file
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+const Register = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
 
-const RegisterForm = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: ''
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8000/core/api/register/', formData);
-            console.log(response.data);  // Handle success response
-        } catch (error) {
-            console.error(error);  // Handle error
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8000/core/api/register/', formData);
+      setSuccessMessage('Registration successful!');
+      setErrors({});
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setErrors(error.response.data);
+      } else {
+        setErrors({ non_field_errors: 'An error occurred' });
+      }
+    }
+  };
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    return (
-        <div className="register-container">
-            <h2>Register</h2>
-            <form onSubmit={handleSubmit} className="register-form">
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" onChange={handleChange} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" onChange={handleChange} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" onChange={handleChange} />
-                </div>
-                <button type="submit" className="btn">Register</button>
-            </form>
-            <p className="login-link">
+  return (
+    <div className="register-container">
+      <h2>Register</h2>
+      {successMessage && <div className="success-message">{successMessage}</div>}
+      <form onSubmit={handleSubmit} className="register-form">
+        <div className="form-group">
+          <label>Username:</label>
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            className={errors.username ? 'error' : ''}
+          />
+          {errors.username && <div className="error-message">{errors.username[0]}</div>}
+        </div>
+        <div className="form-group">
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className={errors.email ? 'error' : ''}
+          />
+          {errors.email && <div className="error-message">{errors.email[0]}</div>}
+        </div>
+        <div className="form-group">
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className={errors.password ? 'error' : ''}
+          />
+          {errors.password && <div className="error-message">{errors.password[0]}</div>}
+        </div>
+        <button type="submit" className="submit-button">Register</button>
+      </form>
+      {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
+      <p className="login-link">
                 Already registered? <Link to="/login">Login here</Link>
             </p>
-        </div>
-    );
+    </div>
+  );
 };
 
-export default RegisterForm;
+export default Register;
