@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
+import '../style.css'; // Import your CSS file for Login component
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -32,43 +33,46 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="form-group">
+          <label htmlFor="username">Username:</label>
           <input
             type="text"
+            id="username"
             name="username"
             value={formData.username}
             onChange={handleChange}
           />
-          {errors.username && <div style={{ color: 'red' }}>{errors.username}</div>}
+          {errors.username && <div className="error-message">{errors.username}</div>}
         </div>
-        <div>
-          <label>Email:</label>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
           />
-          {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
+          {errors.email && <div className="error-message">{errors.email}</div>}
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="form-group">
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
+            id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
           />
-          {errors.password && <div style={{ color: 'red' }}>{errors.password}</div>}
+          {errors.password && <div className="error-message">{errors.password}</div>}
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="btn">Login</button>
       </form>
-      {errors.non_field_errors && <div style={{ color: 'red' }}>{errors.non_field_errors}</div>}
-      <p>
+      {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
+      <p className="register-link">
         Not registered? <Link to="/register">Register here</Link>
       </p>
     </div>
