@@ -1,13 +1,17 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import RegisterForm from './components/RegisterForm'; // Adjust path as per your actual file structure
+import RegisterForm from './components/RegisterForm'; 
+import LoginForm from './components/LoginForm';
 
 const App = () => {
     return (
         <Router>
             <Switch>
+                <Route exact path="/" component={LoginForm} />
                 <Route exact path="/register" component={RegisterForm} />
-                {/* Add more routes for login, profile, etc. */}
+                <Route exact path="/login" component={LoginForm} /> 
+                
             </Switch>
         </Router>
     );
