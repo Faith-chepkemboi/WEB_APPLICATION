@@ -3,10 +3,7 @@ import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 
-
-
-
-const Login = () => {
+const LoginForm = () => {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
   const history = useHistory();
@@ -22,18 +19,19 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/core/api/token/', formData);
-      console.log("response ",response)
       const accessToken = response.data.access;
-      console.log(" accessToken",accessToken)
-      const decodedToken = jwtDecode(accessToken);
-      console.log("decoded token",decodedToken)
-      
 
+      // Decode the access token
+      const decodedToken = jwtDecode(accessToken);
+      console.log("Decoded Token:", decodedToken);
+
+      // Check if the decoded email matches the form data email
       if (decodedToken.email !== formData.email) {
-        setErrors({ email: 'incorrect email' });
+        setErrors({ email: 'Email does not match the token email' });
         return;
       }
 
+      // Save tokens to localStorage
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', response.data.refresh);
       setErrors({});
@@ -48,47 +46,50 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="username">Username:</label>
           <input
             type="text"
+            id="username"
             name="username"
             value={formData.username}
             onChange={handleChange}
           />
-          {errors.username && <div style={{ color: 'red' }}>{errors.username}</div>}
+          {errors.username && <div className="error-message">{errors.username}</div>}
         </div>
-        <div>
-          <label>Email:</label>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
           />
-          {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
+          {errors.email && <div className="error-message">{errors.email}</div>}
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="form-group">
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
+            id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
           />
-          {errors.password && <div style={{ color: 'red' }}>{errors.password}</div>}
+          {errors.password && <div className="error-message">{errors.password}</div>}
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="btn">Login</button>
       </form>
-      {errors.non_field_errors && <div style={{ color: 'red' }}>{errors.non_field_errors}</div>}
-      <p>
+      {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
+      <p className="register-link">
         Not registered? <Link to="/register">Register here</Link>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default LoginForm;
