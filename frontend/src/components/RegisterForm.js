@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 import axios from 'axios';
-import '../style.css';  
+import '../style.css';  // Import your CSS file for styling
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -41,6 +42,9 @@ const RegisterForm = () => {
                 </div>
                 <button type="submit" className="btn">Register</button>
             </form>
+            <p className="login-link">
+                Already registered? <Link to="/login">Login here</Link>
+            </p>
         </div>
     );
 };

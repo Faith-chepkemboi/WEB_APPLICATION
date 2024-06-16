@@ -112,4 +112,20 @@
 .register-form button.btn:hover {
     background-color: #0056b3;
 }
+/* style.css */
+
+.login-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-link a {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.login-link a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
 
