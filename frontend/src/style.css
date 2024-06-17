@@ -320,6 +320,24 @@
 .logout-button .fa-sign-out-alt {
   margin-right: 5px;
 }
+/* Profile.css */
+
+.profile-container {
+  background-color: #1380b3; /* Light gray background */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow */
+  margin-bottom: 20px;
+}
+
+.profile-details {
+  margin-top: 10px;
+}
+
+.profile-details p {
+  margin-bottom: 8px;
+}
+
 
 
     

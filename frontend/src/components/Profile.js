@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../style.css'; // Import CSS file for styling
 
 const Profile = () => {
     const [userProfile, setUserProfile] = useState(null);
@@ -31,12 +32,12 @@ const Profile = () => {
     }
 
     return (
-        <div>
+        <div className="profile-container">
             <h2>Profile</h2>
             {userProfile ? (
-                <div>
-                    <p>Email: {userProfile.email}</p>
-                    <p>Username: {userProfile.username}</p>
+                <div className="profile-details">
+                    <p><strong>Email:</strong> {userProfile.email}</p>
+                    <p><strong>Username:</strong> {userProfile.username}</p>
                 </div>
             ) : (
                 <p>No profile data available</p>
