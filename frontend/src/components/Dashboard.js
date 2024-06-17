@@ -65,6 +65,9 @@ const Dashboard = () => {
           <ListItem button component="a" href="/" onClick={toggleDrawer}>
             <ListItemText primary="Logout" />
           </ListItem>
+          <ListItem button component="a" href="/updateProfile" onClick={toggleDrawer}>
+            <ListItemText primary="Update Profile" />
+          </ListItem>
         </List>
       </DrawerStyled>
       

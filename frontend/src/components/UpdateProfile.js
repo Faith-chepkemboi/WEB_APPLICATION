@@ -1,38 +1,46 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const UpdateProfile = () => {
     const [formData, setFormData] = useState({
-        bio: '',
-        location: '',
-        birth_date: ''
+        username: '',
+        email: ''
     });
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Implement your update profile logic here (e.g., API call)
-        console.log('Form submitted with data:', formData);
-        alert('Profile updated successfully!');
+        
+        try {
+            const response = await axios.put('http://localhost:8000/core/api/updateProfile/', formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            });
+            
+            console.log('Profile updated successfully:', response.data);
+            alert('Profile updated successfully!');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile. Please try again.');
+        }
     };
+    
 
     return (
         <div>
             <h2>Update Profile</h2>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Bio:
-                    <textarea name="bio" value={formData.bio} onChange={handleChange} />
+                    Username:
+                    <input type="text" name="username" value={formData.username} onChange={handleChange} />
                 </label>
                 <label>
-                    Location:
-                    <input type="text" name="location" value={formData.location} onChange={handleChange} />
-                </label>
-                <label>
-                    Birth Date:
-                    <input type="date" name="birth_date" value={formData.birth_date} onChange={handleChange} />
+                    Email:
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} />
                 </label>
                 <button type="submit">Update Profile</button>
             </form>

@@ -13,7 +13,8 @@ const App = () => {
                 <Route path="/" exact component={LoginForm} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/profile" component={Profile} />
-                <Route path="/profile/update" component={UpdateProfile} />
+                <Route path="/updateProfile" component={UpdateProfile} />
+
                 <Route path="/logout" component={Logout} />
             </Switch>
         </Router>
