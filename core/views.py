@@ -8,6 +8,11 @@ from django.middleware.csrf import get_token
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .serializers import MyTokenObtainPairSerializer  
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from rest_framework.permissions import IsAuthenticated
+
+from django.contrib.auth import get_user_model
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 # register function
@@ -34,10 +39,10 @@ def login_user(request):
 
     if user is not None:
         login(request, user)
-        # Return success response with token or any other data
+       
         return Response({'detail': 'Login successful'})
     else:
-        # Return error response if authentication fails
+        
         return Response({'detail': 'Invalid email or password'}, status=400)
     
     
@@ -46,7 +51,6 @@ def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
 
-# views.py
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -58,3 +62,12 @@ class MyTokenRefreshView(TokenRefreshView):
 
 
 
+User = get_user_model()
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_profile(request):
+    user = request.user  
+    serializer = UserSerializer(user) 
+    return Response(serializer.data)
