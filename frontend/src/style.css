@@ -290,7 +290,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #00ff73;
+  background-color: #24ac61;
   color: white;
 }
 
@@ -304,8 +304,8 @@
   bottom: 20px;
   right: 20px;
   text-decoration: none;
-  color: white;
-  background-color: #007bff;
+  color: black;
+  background-color: #3cc5ca;
   padding: 10px 15px;
   border-radius: 5px;
   display: flex;

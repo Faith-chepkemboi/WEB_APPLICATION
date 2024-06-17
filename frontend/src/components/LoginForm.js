@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import '../style.css';  // Make sure to create this CSS file
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
