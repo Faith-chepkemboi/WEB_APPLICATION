@@ -46,7 +46,7 @@ def get_user_profile(request):
     serializer = UserSerializer(user)
     return Response(serializer.data)
 
-
+# update uder
 @api_view(['PUT'])  # Update user data using PUT request
 @permission_classes([IsAuthenticated])
 def update_user_profile(request):
@@ -56,6 +56,16 @@ def update_user_profile(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# delete user 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user_profile(request):
+    user = request.user
+    user.delete()
+    return Response({'detail': 'Profile deleted successfully'})
+
+
 
 
 @api_view(['GET'])
