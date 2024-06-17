@@ -64,10 +64,33 @@ def delete_user_profile(request):
     user = request.user
     user.delete()
     return Response({'detail': 'Profile deleted successfully'})
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    user = request.user
+    current_password = request.data.get('oldPassword', '').strip()
+    new_password = request.data.get('newPassword', '')
+    repeat_new_password = request.data.get('repeatNewPassword', '')
 
+    # Check if new passwords match
+    if new_password != repeat_new_password:
+        return Response({'detail': 'New passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    try:
+        # Check if current password matches user's password
+        if not user.check_password(current_password):
+            return Response({'detail': 'Current password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Update user's password
+        user.set_password(new_password)
+        user.save()
 
+        return Response({'detail': 'Password changed successfully.'})
+
+    except Exception as e:
+        logger.error(f"Error changing password for user {user.username}: {str(e)}")
+        return Response({'detail': 'Failed to change password. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['GET'])
 def get_csrf_token(request):
     token = get_token(request)
