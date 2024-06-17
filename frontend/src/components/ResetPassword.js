@@ -39,10 +39,11 @@ const ResetPassword = () => {
                 new_password: formData.newPassword,
                 repeat_new_password: formData.repeatNewPassword,
             });
-            setSuccessMessage(response.data.detail);
+            console.log("response",response)
+           // setSuccessMessage(response.data.detail);
             setError('');
         } catch (error) {
-            setError(error.response.data.detail);
+           // setError(error.response.data.detail);
         }
     };
 
