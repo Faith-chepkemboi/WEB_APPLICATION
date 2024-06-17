@@ -10,8 +10,8 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import backgroundImage from '../assets/background-image.jpg'; // Ensure correct path
 
 const DashboardContainer = styled('div')({
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
+    // backgroundImage: `url(${backgroundImage})`,
+    // backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     minHeight: '100vh',

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Correct import statement for jwtDecode
+import { jwtDecode } from 'jwt-decode'; // Import corrected import statement
+import '../style.css'; // Import your CSS file with correct path
 import { Snackbar } from '@mui/material'; // Import Snackbar from Material-UI
-import '../style.css'; // Ensure correct path for your CSS file
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+    const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
     const [errors, setErrors] = useState({});
-    const [snackbarOpen, setSnackbarOpen] = useState(false); // State for controlling Snackbar
-    const [snackbarSeverity, setSnackbarSeverity] = useState('error'); // Default severity
-    const [snackbarMessage, setSnackbarMessage] = useState(''); // Message to be displayed
     const history = useHistory();
 
     const handleChange = (e) => {
@@ -20,8 +18,8 @@ const LoginForm = () => {
         });
     };
 
-    const handleCloseSnackbar = () => {
-        setSnackbarOpen(false);
+    const handleCheckboxChange = (e) => {
+        setRememberMe(e.target.checked);
     };
 
     const handleSubmit = async (e) => {
@@ -45,9 +43,14 @@ const LoginForm = () => {
                 return;
             }
 
-            // Save tokens to localStorage
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', response.data.refresh);
+            // Save tokens to localStorage if "Remember Me" is checked
+            if (rememberMe) {
+                localStorage.setItem('accessToken', accessToken);
+                // Optionally store a refresh token as well
+            } else {
+                sessionStorage.setItem('accessToken', accessToken);
+                // Optionally store a refresh token in sessionStorage
+            }
 
             // Clear any previous errors
             setErrors({});
@@ -58,23 +61,11 @@ const LoginForm = () => {
             if (error.response && error.response.data) {
                 // Log the error response for debugging
                 console.error('Login error:', error.response.data);
-
-                if (error.response.status === 400 && error.response.data.detail === 'Incorrect password') {
-                    setSnackbarSeverity('error');
-                    setSnackbarMessage('Incorrect password. Please try again.');
-                } else {
-                    // Set generic error message for invalid email or password
-                    setSnackbarSeverity('error');
-                    setSnackbarMessage('Invalid email or password. Please try again.');
-                }
+                setErrors(error.response.data);
             } else {
                 console.error('Login error:', error);
-                setSnackbarSeverity('error');
-                setSnackbarMessage('An error occurred. Please try again.');
+                setErrors({ non_field_errors: 'An error occurred' });
             }
-
-            // Open the Snackbar to display the error message
-            setSnackbarOpen(true);
         }
     };
 
@@ -115,15 +106,19 @@ const LoginForm = () => {
                     />
                     {errors.password && <div className="error-message">{errors.password}</div>}
                 </div>
+                <div className="form-group">
+                    <input
+                        type="checkbox"
+                        id="rememberMe"
+                        name="rememberMe"
+                        checked={rememberMe}
+                        onChange={handleCheckboxChange}
+                    />
+                    <label htmlFor="rememberMe">Remember Me</label>
+                </div>
                 <button type="submit" className="btn">Login</button>
             </form>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-            />
+            {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
             <p className="register-link">
                 Not registered? <Link to="/register">Register here</Link>
             </p>
