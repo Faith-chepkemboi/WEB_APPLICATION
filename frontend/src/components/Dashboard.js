@@ -44,22 +44,28 @@ const Dashboard = () => {
     };
 
     const handleDeleteProfile = async () => {
-        try {
-            await axios.delete('http://localhost:8000/core/api/deleteProfile/', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                }
-            });
-            // Clear tokens from localStorage
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            // Redirect to login page or another appropriate page
-            history.push('/login');
-        } catch (error) {
-            console.error('Error deleting profile:', error);
-            alert('Failed to delete profile. Please try again.');
-        }
-    };
+      const confirmDelete = window.confirm('Are you sure you want to delete this Account profile?');
+      if (!confirmDelete) {
+          return; // If user cancels, do nothing
+      }
+
+      try {
+          await axios.delete('http://localhost:8000/core/api/deleteProfile/', {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+              }
+          });
+          // Clear tokens from localStorage
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          // Redirect to login page or another appropriate page
+          history.push('/login');
+      } catch (error) {
+          console.error('Error deleting profile:', error);
+          alert('Failed to delete profile. Please try again.');
+      }
+  };
+
 
     return (
         <DashboardContainer>
