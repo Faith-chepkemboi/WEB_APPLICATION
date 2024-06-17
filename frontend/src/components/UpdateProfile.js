@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import { Button, TextField, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 const FormContainer = styled('div')({
   backgroundColor: '#fff',
@@ -37,6 +38,8 @@ const UpdateProfile = () => {
     email: '',
   });
 
+  const history = useHistory(); 
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -53,6 +56,8 @@ const UpdateProfile = () => {
 
       console.log('Profile updated successfully:', response.data);
       alert('Profile updated successfully!');
+      history.push('/dashboard');
+
     } catch (error) {
       console.error('Error updating profile:', error);
       alert('Failed to update profile. Please try again.');
