@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Snackbar } from '@mui/material';
 
 const ChangePasswordForm = ({ onSuccess }) => {
     const [passwordData, setPasswordData] = useState({
@@ -8,15 +8,24 @@ const ChangePasswordForm = ({ onSuccess }) => {
         newPassword: '',
         repeatNewPassword: '',
     });
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
     const handleChange = (e) => {
         setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
     };
 
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (passwordData.newPassword !== passwordData.repeatNewPassword) {
-            alert('New passwords do not match. Please try again.');
+            setSnackbarSeverity('error');
+            setSnackbarMessage('New passwords do not match. Please try again.');
+            setSnackbarOpen(true);
             return;
         }
 
@@ -27,11 +36,20 @@ const ChangePasswordForm = ({ onSuccess }) => {
                 }
             });
             console.log('Password changed successfully:', response.data);
-            alert('Password changed successfully!');
+            setSnackbarSeverity('success');
+            setSnackbarMessage('Password changed successfully!');
+            setSnackbarOpen(true);
             onSuccess(); // Call the onSuccess callback provided by parent component
         } catch (error) {
-            console.error('Error changing password:', error);
-            alert('Failed to change password. Please try again.');
+            console.error('Error changing password:', error.response.data.detail);
+            if (error.response.status === 400 && error.response.data.detail === 'Current password is incorrect.') {
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Current password is incorrect. Please try again.');
+            } else {
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Failed to change password. Please try again.');
+            }
+            setSnackbarOpen(true);
         }
     };
 
@@ -70,6 +88,13 @@ const ChangePasswordForm = ({ onSuccess }) => {
             <Button type="submit" variant="contained" color="primary">
                 Change Password
             </Button>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+            />
         </form>
     );
 };

@@ -64,6 +64,8 @@ def delete_user_profile(request):
     user = request.user
     user.delete()
     return Response({'detail': 'Profile deleted successfully'})
+
+    # change password
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def change_password(request):
@@ -90,6 +92,8 @@ def change_password(request):
     except Exception as e:
         logger.error(f"Error changing password for user {user.username}: {str(e)}")
         return Response({'detail': 'Failed to change password. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
     
 @api_view(['GET'])
 def get_csrf_token(request):
