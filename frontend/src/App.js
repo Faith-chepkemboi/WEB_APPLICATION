@@ -6,6 +6,7 @@ import ChangePasswordForm from './components/ChangePasswordForm';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import UpdateProfile from './components/UpdateProfile';
+import ForgotPassword from './components/ForgotPassword';
 
 import Logout from './components/Logout';
 
@@ -18,8 +19,8 @@ const App = () => {
                 <Route path="/profile" component={Profile} />
                 <Route path="/register" component={RegisterForm} />
                 <Route path="/changePassword" component={ChangePasswordForm} />
+                <Route path="/forgotPassword" component={ForgotPassword} />
                 <Route path="/updateProfile" component={UpdateProfile} />
-
                 <Route path="/logout" component={Logout} />
                 
             </Switch>

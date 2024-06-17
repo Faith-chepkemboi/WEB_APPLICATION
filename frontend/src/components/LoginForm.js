@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Import corrected import statement
 import '../style.css'; // Import your CSS file with correct path
 import { Snackbar } from '@mui/material'; // Import Snackbar from Material-UI
+
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
@@ -60,7 +61,11 @@ const LoginForm = () => {
             if (error.response && error.response.data) {
                 // Log the error response for debugging
                 console.error('Login error:', error.response.data);
-                setErrors(error.response.data);
+                if (error.response.status === 400 && error.response.data.detail === 'Incorrect password') {
+                    setErrors({ non_field_errors: 'Incorrect password. Please try again.' });
+                } else {
+                    setErrors(error.response.data);
+                }
             } else {
                 console.error('Login error:', error);
                 setErrors({ non_field_errors: 'An error occurred' });
@@ -114,11 +119,14 @@ const LoginForm = () => {
                         checked={rememberMe}
                         onChange={handleCheckboxChange}
                     />
-                    {/* <label htmlFor="rememberMe">Remember Me</label> */}
+                   
                 </div>
                 <button type="submit" className="btn">Login</button>
             </form>
             {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
+            <p className="forgot-password-link">
+                <Link to="/forgotPassword">Forgot Password?</Link>
+            </p>
             <p className="register-link">
                 Not registered? <Link to="/register">Register here</Link>
             </p>

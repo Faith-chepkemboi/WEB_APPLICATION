@@ -19,6 +19,11 @@ SECRET_KEY = 'django-insecure-@(7@t9mh96cj-x#eb=j0ly+(scw3y8^kt4%i@42wmb7+@i_2&l
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8081',  # Replace with your frontend URL
+    'http://127.0.0.1:8080',   # Example with localhost IP
+]
+
 
 
 # Application definition
@@ -63,6 +68,16 @@ SIMPLE_JWT = {
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
+# settings.py
+
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # Use TLS for secure connection
+EMAIL_HOST_USER = 'chepkemoitoo3@gmail.com'
+EMAIL_HOST_PASSWORD = 'eezh uzau cpcy kbqh'
 
 
 MIDDLEWARE = [
