@@ -7,8 +7,6 @@ import { styled } from '@mui/material/styles'; // Import styled from MUI
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-import backgroundImage from '../assets/background-image.jpg'; // Ensure correct path
-
 const DashboardContainer = styled('div')({
     // backgroundImage: `url(${backgroundImage})`,
     // backgroundSize: 'cover',

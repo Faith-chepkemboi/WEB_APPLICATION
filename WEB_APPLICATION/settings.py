@@ -24,6 +24,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8080',   # Example with localhost IP
 ]
 
+FRONTEND_BASE_URL = 'http://localhost:8081'
 
 
 # Application definition

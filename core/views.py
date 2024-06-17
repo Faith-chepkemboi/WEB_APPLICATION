@@ -12,6 +12,11 @@ from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+
+def construct_frontend_url(path):
+    return settings.FRONTEND_BASE_URL + path
+
+
 User = get_user_model()
 
 @api_view(['POST'])
@@ -110,7 +115,9 @@ def forgot_password(request):
     try:
         user = User.objects.get(email=email)
         token = default_token_generator.make_token(user)
-        reset_link = request.build_absolute_uri(reverse('reset_password')) + f'?token={token}&email={email}'
+        reset_linkk = construct_frontend_url(reverse('reset_password')) + f'?token={token}&email={email}'
+        reset_link = reset_linkk.replace('/core', '')
+
 
         send_mail(
             'Password Reset',
