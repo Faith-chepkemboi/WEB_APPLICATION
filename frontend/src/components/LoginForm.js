@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";
-import '../style.css';  // Make sure to create this CSS file
+import { jwtDecode } from 'jwt-decode'; // Correct import statement for jwtDecode
+import { Snackbar } from '@mui/material'; // Import Snackbar from Material-UI
+import '../style.css'; // Ensure correct path for your CSS file
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const [errors, setErrors] = useState({});
+    const [snackbarOpen, setSnackbarOpen] = useState(false); // State for controlling Snackbar
+    const [snackbarSeverity, setSnackbarSeverity] = useState('error'); // Default severity
+    const [snackbarMessage, setSnackbarMessage] = useState(''); // Message to be displayed
     const history = useHistory();
 
     const handleChange = (e) => {
@@ -14,6 +18,10 @@ const LoginForm = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+    };
+
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
     };
 
     const handleSubmit = async (e) => {
@@ -50,11 +58,23 @@ const LoginForm = () => {
             if (error.response && error.response.data) {
                 // Log the error response for debugging
                 console.error('Login error:', error.response.data);
-                setErrors(error.response.data);
+
+                if (error.response.status === 400 && error.response.data.detail === 'Incorrect password') {
+                    setSnackbarSeverity('error');
+                    setSnackbarMessage('Incorrect password. Please try again.');
+                } else {
+                    // Set generic error message for invalid email or password
+                    setSnackbarSeverity('error');
+                    setSnackbarMessage('Invalid email or password. Please try again.');
+                }
             } else {
                 console.error('Login error:', error);
-                setErrors({ non_field_errors: 'An error occurred' });
+                setSnackbarSeverity('error');
+                setSnackbarMessage('An error occurred. Please try again.');
             }
+
+            // Open the Snackbar to display the error message
+            setSnackbarOpen(true);
         }
     };
 
@@ -97,7 +117,13 @@ const LoginForm = () => {
                 </div>
                 <button type="submit" className="btn">Login</button>
             </form>
-            {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+            />
             <p className="register-link">
                 Not registered? <Link to="/register">Register here</Link>
             </p>

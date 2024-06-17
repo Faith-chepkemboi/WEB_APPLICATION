@@ -36,6 +36,19 @@ def login_user(request):
         login(request, user)
         return Response({'detail': 'Login successful'})
     else:
+        # Check if the username exists but the password is incorrect
+        if username:
+            user_by_username = User.objects.filter(username=username).first()
+            if user_by_username and not user_by_username.check_password(password):
+                return Response({'detail': 'Incorrect password'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the email exists but the password is incorrect
+        if email:
+            user_by_email = User.objects.filter(email=email).first()
+            if user_by_email and not user_by_email.check_password(password):
+                return Response({'detail': 'Incorrect password'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # If neither username nor email matches or if user not found
         return Response({'detail': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -93,7 +106,7 @@ def change_password(request):
         logger.error(f"Error changing password for user {user.username}: {str(e)}")
         return Response({'detail': 'Failed to change password. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    
+
     
 @api_view(['GET'])
 def get_csrf_token(request):
