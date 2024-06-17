@@ -92,6 +92,9 @@ const Dashboard = () => {
                     <ListItem button onClick={handleDeleteProfile}>
                         <ListItemText primary="Delete Profile" />
                     </ListItem>
+                    <ListItem button component="a" href="/changePassword" onClick={toggleDrawer}>
+                        <ListItemText primary="Change Password" />
+                    </ListItem>
                 </List>
             </DrawerStyled>
 

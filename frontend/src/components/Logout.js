@@ -15,7 +15,7 @@ const Logout = () => {
         console.log("Tokens removed");
 
         // Redirect to login page
-        history.push('/');
+        history.push('/login');
         console.log("Redirecting to login");
     }, [history]);
 
