@@ -279,6 +279,48 @@
 .logout-button .fa-sign-out-alt {
     margin-right: 5px;
 }
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #00ff73;
+  color: white;
+}
+
+.dashboard-content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.logout-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  text-decoration: none;
+  color: white;
+  background-color: #007bff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.logout-button:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+.logout-button .fa-sign-out-alt {
+  margin-right: 5px;
+}
+
 
     
 
