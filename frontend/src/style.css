@@ -337,6 +337,15 @@
 .profile-details p {
   margin-bottom: 8px;
 }
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px; /* Adjust spacing between checkbox and label as needed */
+}
+
 
 
 

@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Import corrected import statement
 import '../style.css'; // Import your CSS file with correct path
 import { Snackbar } from '@mui/material'; // Import Snackbar from Material-UI
-
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
@@ -106,7 +105,8 @@ const LoginForm = () => {
                     />
                     {errors.password && <div className="error-message">{errors.password}</div>}
                 </div>
-                <div className="form-group">
+                <div className="form-group checkbox-group">
+                <label htmlFor="rememberMe">Remember Me</label>
                     <input
                         type="checkbox"
                         id="rememberMe"
@@ -114,7 +114,7 @@ const LoginForm = () => {
                         checked={rememberMe}
                         onChange={handleCheckboxChange}
                     />
-                    <label htmlFor="rememberMe">Remember Me</label>
+                    {/* <label htmlFor="rememberMe">Remember Me</label> */}
                 </div>
                 <button type="submit" className="btn">Login</button>
             </form>
