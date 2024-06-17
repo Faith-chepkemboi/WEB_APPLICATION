@@ -250,5 +250,35 @@
     text-align: center;
     margin-top: 10px;
   }
+  .dashboard-container {
+    padding: 20px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-button {
+    text-decoration: none;
+    color: #333;
+    background-color: #007bff;
+
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.logout-button:hover {
+    background-color: #e9ecef;
+    color: #000;
+}
+
+.logout-button .fa-sign-out-alt {
+    margin-right: 5px;
+}
+
     
 

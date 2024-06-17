@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import RegisterForm from './components/RegisterForm'; 
 import LoginForm from './components/LoginForm';
 import Dashboard from './components/Dashboard';
+import Logout from './components/Logout';
 // import Profile from './components/Profile';
 // import UpdateProfile from './components/UpdateProfile';
 
@@ -16,6 +17,9 @@ const App = () => {
                 <Route exact path="/register" component={RegisterForm} />
                 <Route exact path="/login" component={LoginForm} />
                 <Route path="/dashboard" component={Dashboard} />
+                <Route path="/logout" component={Logout} />
+               
+
                 {/* <Route path="/profile" exact component={Profile} />
                 <Route path="/profile/update" component={UpdateProfile} /> */}
  
