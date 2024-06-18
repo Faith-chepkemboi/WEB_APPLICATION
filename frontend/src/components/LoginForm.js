@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Import corrected import statement
 import '../style.css'; // Import your CSS file with correct path
-import { Snackbar } from '@mui/material'; // Import Snackbar from Material-UI
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -26,14 +25,16 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8000/core/api/token/', formData);
+            console.log("response",response)
             const accessToken = response.data.access;
 
             // Decode the access token
             const decodedToken = jwtDecode(accessToken);
+            console.log("decoded token",decodedToken)
 
             // Check if the decoded email matches the form data email
             if (decodedToken.email !== formData.email) {
-                setErrors({ email: 'Email is not registered' });
+                setErrors({ email: 'Email is Invalid' });
                 return;
             }
 
@@ -58,10 +59,13 @@ const LoginForm = () => {
             // Redirect to dashboard
             history.push('/dashboard');
         } catch (error) {
-            if (error.response && error.response.data) {
-                // Log the error response for debugging
+            if (error.response && error.response.status === 401) {
+                // Handle specific error message for 401 Unauthorized
+                setErrors({ non_field_errors: 'Invalid password or username' });
+            } else if (error.response && error.response.data) {
+                // Handle other error responses
                 console.error('Login error:', error.response.data);
-                if (error.response.status === 400 && error.response.data.detail === 'Incorrect password') {
+                if (error.response.status === 401 && error.response.data.detail === 'Incorrect password') {
                     setErrors({ non_field_errors: 'Incorrect password. Please try again.' });
                 } else {
                     setErrors(error.response.data);
@@ -111,7 +115,7 @@ const LoginForm = () => {
                     {errors.password && <div className="error-message">{errors.password}</div>}
                 </div>
                 <div className="form-group checkbox-group">
-                <label htmlFor="rememberMe">Remember Me</label>
+                    <label htmlFor="rememberMe">Remember Me</label>
                     <input
                         type="checkbox"
                         id="rememberMe"
@@ -119,7 +123,6 @@ const LoginForm = () => {
                         checked={rememberMe}
                         onChange={handleCheckboxChange}
                     />
-                   
                 </div>
                 <button type="submit" className="btn">Login</button>
             </form>
