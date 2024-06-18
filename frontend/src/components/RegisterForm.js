@@ -75,7 +75,7 @@ const Register = () => {
       </form>
       {errors.non_field_errors && <div className="error-message">{errors.non_field_errors}</div>}
       <p className="login-link">
-                Already registered? <Link to="/login">Login here</Link>
+                Already registered? <Link to="/">Login here</Link>
             </p>
     </div>
   );

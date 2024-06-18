@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { Menu } from '@mui/icons-material';
-import { AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemText } from '@mui/material';
-import { styled } from '@mui/material/styles'; // Import styled from MUI
+import { AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUser, faEdit, faTrashAlt, faKey } from '@fortawesome/free-solid-svg-icons';
 
 const DashboardContainer = styled('div')({
-    // backgroundImage: `url(${backgroundImage})`,
-    // backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     minHeight: '100vh',
@@ -18,20 +16,44 @@ const DashboardContainer = styled('div')({
 });
 
 const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    backgroundColor: 'green', // Set the background color to green
+    backgroundColor: 'green',
 }));
 
 const DrawerStyled = styled(Drawer)(({ theme }) => ({
     '& .MuiDrawer-paper': {
         width: '240px',
-        backgroundColor: '#e6e6fa', // Light purple background color
-        boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.2)', // Shadow for the drawer
-        transition: 'box-shadow 0.3s', // Optional: Add transition for smoother effect
+        backgroundColor: '#e6e6fa',
+        boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.2)',
+        transition: 'box-shadow 0.3s',
         '&:hover': {
-            boxShadow: '2px 0px 5px #3cc5ca', // Shadow on hover with light blue color
+            boxShadow: '2px 0px 5px #3cc5ca',
         },
     },
 }));
+
+const ListItemStyled = styled(ListItem)(({ theme }) => ({
+    color: '#333',
+    marginBottom: '8px',
+    borderRadius: '8px',
+    transition: 'background-color 0.3s, transform 0.3s',
+    background: 'linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%)',
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    '&:hover': {
+        backgroundColor: '#d1c4e9',
+        transform: 'scale(1.02)',
+    },
+}));
+
+const ListItemTextStyled = styled(ListItemText)({
+    '& .MuiTypography-root': {
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+});
+
+const ListItemIconStyled = styled(ListItemIcon)({
+    color: '#fff',
+});
 
 const Dashboard = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -42,28 +64,25 @@ const Dashboard = () => {
     };
 
     const handleDeleteProfile = async () => {
-      const confirmDelete = window.confirm('Are you sure you want to delete this Account profile?');
-      if (!confirmDelete) {
-          return; // If user cancels, do nothing
-      }
+        const confirmDelete = window.confirm('Are you sure you want to delete this Account profile?');
+        if (!confirmDelete) {
+            return;
+        }
 
-      try {
-          await axios.delete('http://localhost:8000/core/api/deleteProfile/', {
-              headers: {
-                  Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-              }
-          });
-          // Clear tokens from localStorage
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          // Redirect to login page or another appropriate page
-          history.push('/login');
-      } catch (error) {
-          console.error('Error deleting profile:', error);
-          alert('Failed to delete profile. Please try again.');
-      }
-  };
-
+        try {
+            await axios.delete('http://localhost:8000/core/api/deleteProfile/', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            });
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            history.push('/');
+        } catch (error) {
+            console.error('Error deleting profile:', error);
+            alert('Failed to delete profile. Please try again.');
+        }
+    };
 
     return (
         <DashboardContainer>
@@ -81,18 +100,30 @@ const Dashboard = () => {
 
             <DrawerStyled anchor="left" open={drawerOpen} onClose={toggleDrawer}>
                 <List>
-                    <ListItem button component="a" href="/profile" onClick={toggleDrawer}>
-                        <ListItemText primary="View Profile" />
-                    </ListItem>
-                    <ListItem button component="a" href="/updateProfile" onClick={toggleDrawer}>
-                        <ListItemText primary="Update Profile" />
-                    </ListItem>
-                    <ListItem button onClick={handleDeleteProfile}>
-                        <ListItemText primary="Delete Profile" />
-                    </ListItem>
-                    <ListItem button component="a" href="/changePassword" onClick={toggleDrawer}>
-                        <ListItemText primary="Change Password" />
-                    </ListItem>
+                    <ListItemStyled button component="a" href="/profile" onClick={toggleDrawer}>
+                        <ListItemIconStyled>
+                            <FontAwesomeIcon icon={faUser} />
+                        </ListItemIconStyled>
+                        <ListItemTextStyled primary="View Profile" />
+                    </ListItemStyled>
+                    <ListItemStyled button component="a" href="/updateProfile" onClick={toggleDrawer}>
+                        <ListItemIconStyled>
+                            <FontAwesomeIcon icon={faEdit} />
+                        </ListItemIconStyled>
+                        <ListItemTextStyled primary="Update Profile" />
+                    </ListItemStyled>
+                    <ListItemStyled button onClick={handleDeleteProfile}>
+                        <ListItemIconStyled>
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                        </ListItemIconStyled>
+                        <ListItemTextStyled primary="Delete Profile" />
+                    </ListItemStyled>
+                    <ListItemStyled button component="a" href="/changePassword" onClick={toggleDrawer}>
+                        <ListItemIconStyled>
+                            <FontAwesomeIcon icon={faKey} />
+                        </ListItemIconStyled>
+                        <ListItemTextStyled primary="Change Password" />
+                    </ListItemStyled>
                 </List>
             </DrawerStyled>
 

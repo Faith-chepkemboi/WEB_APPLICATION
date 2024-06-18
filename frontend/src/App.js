@@ -15,7 +15,7 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/login" exact component={LoginForm} />
+                <Route path="/" exact component={LoginForm} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/register" component={RegisterForm} />
