@@ -138,24 +138,26 @@ def reset_password(request):
     token = request.data.get('token')
     email = request.data.get('email')
     new_password = request.data.get('newPassword')
+    repeat_new_password = request.data.get('repeat_new_password')
 
-    if not token or not email or not new_password:
-        return Response({'detail': 'Invalid request. Please provide token, email, and newPassword.'}, status=status.HTTP_400_BAD_REQUEST)
+    if not all([token, email, new_password, repeat_new_password]):
+        return Response({'detail': 'Invalid request. Please provide token, email, newPassword, and repeat_new_password.'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         user = User.objects.get(email=email)
+        if default_token_generator.check_token(user, token):
+            if new_password != repeat_new_password:
+                return Response({'detail': 'New passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.set_password(new_password)
+                user.save()
+                return Response({'detail': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)
+        else:
+
+            return Response({'detail': 'Invalid token or token has expired.'}, status=status.HTTP_400_BAD_REQUEST)
     except User.DoesNotExist:
-        return Response({'detail': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-    if not default_token_generator.check_token(user, token):
-        return Response({'detail': 'Invalid token or token has expired.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    # Token is valid, proceed to reset password
-    user.set_password(new_password)
-    user.save()
-
-    return Response({'detail': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)
-
+        return Response({'detail': 'User with this email does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['GET'])
 def get_csrf_token(request):
     token = get_token(request)
