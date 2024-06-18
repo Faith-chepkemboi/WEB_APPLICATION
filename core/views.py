@@ -129,7 +129,7 @@ def forgot_password(request):
         token = default_token_generator.make_token(user)
 
                # Construct reset link with reverse and remove /core/api/
-        reset_linkk = construct_frontend_url(reverse('reset_password')) + f'?token={token}'
+        reset_linkk = construct_frontend_url(reverse('reset_password')) + f'?token={token}&email={email}'
         reset_link = reset_linkk.replace('/core/api', '')
 
 
@@ -149,12 +149,13 @@ def forgot_password(request):
     except Exception as e:
         logger.error(f'Error sending password reset email: {str(e)}')
         return JsonResponse({'detail': 'An error occurred while sending the password reset link.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def reset_password(request):
     token = request.data.get('token')
     email = request.data.get('email')
-    new_password = request.data.get('newPassword')
+    new_password = request.data.get('new_password')
     repeat_new_password = request.data.get('repeat_new_password')
 
     if not all([token, email, new_password, repeat_new_password]):
@@ -170,11 +171,9 @@ def reset_password(request):
                 user.save()
                 return Response({'detail': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)
         else:
-
             return Response({'detail': 'Invalid token or token has expired.'}, status=status.HTTP_400_BAD_REQUEST)
     except User.DoesNotExist:
-        return Response({'detail': 'User with this email does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
-    
+        return Response({'detail': 'User with this email does not exist.'}, status=status.HTTP_400_BAD_REQUEST)    
 @api_view(['GET'])
 def get_csrf_token(request):
     token = get_token(request)

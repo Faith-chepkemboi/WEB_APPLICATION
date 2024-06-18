@@ -1,5 +1,3 @@
-// ResetPassword.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -8,6 +6,8 @@ const ResetPassword = () => {
     const history = useHistory();
     const location = useLocation();
     const [formData, setFormData] = useState({
+        token: new URLSearchParams(location.search).get('token'),
+        email: new URLSearchParams(location.search).get('email'),
         newPassword: '',
         repeatNewPassword: '',
     });
@@ -23,12 +23,16 @@ const ResetPassword = () => {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
-        
-        const token = new URLSearchParams(location.search).get('token');
-        const email = new URLSearchParams(location.search).get('email');
+
+        const { token, email, newPassword, repeatNewPassword } = formData;
 
         if (!token || !email) {
             setError('Invalid reset link. Please request a new one.');
+            return;
+        }
+
+        if (newPassword !== repeatNewPassword) {
+            setError('New passwords do not match.');
             return;
         }
 
@@ -36,14 +40,14 @@ const ResetPassword = () => {
             const response = await axios.post('http://localhost:8000/core/api/reset-password/', {
                 token,
                 email,
-                new_password: formData.newPassword,
-                repeat_new_password: formData.repeatNewPassword,
+                new_password: newPassword,
+                repeat_new_password: repeatNewPassword,
             });
-            console.log("response",response)
-           // setSuccessMessage(response.data.detail);
+
+            setSuccessMessage(response.data.detail);
             setError('');
         } catch (error) {
-           // setError(error.response.data.detail);
+            setError('Error resetting password. Please try again.');
         }
     };
 
