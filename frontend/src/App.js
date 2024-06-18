@@ -21,7 +21,7 @@ const App = () => {
                 <Route path="/register" component={RegisterForm} />
                 <Route path="/changePassword" component={ChangePasswordForm} />
                 <Route path="/forgotPassword" component={ForgotPassword} />
-                <Route path="/reset_password" component={ResetPassword} />
+                <Route path="/reset-password" component={ResetPassword} />
                 <Route path="/updateProfile" component={UpdateProfile} />
                 <Route path="/logout" component={Logout} />
                 

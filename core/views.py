@@ -11,6 +11,11 @@ from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+import logging
+
+from django.contrib.auth.models import User
+from rest_framework import status
+
 
 
 def construct_frontend_url(path):
@@ -105,33 +110,45 @@ def change_password(request):
         logger.error(f"Error changing password for user {user.username}: {str(e)}")
         return Response({'detail': 'Failed to change password. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+logger = logging.getLogger(__name__)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def forgot_password(request):
     email = request.data.get('email')
-    if not email:
-        return Response({'detail': 'Please provide an email address'}, status=status.HTTP_400_BAD_REQUEST)
+    username = request.data.get('username')  # Assuming username is also provided in the request
+    
+    if not email or not username:
+        return JsonResponse({'detail': 'Please provide both email and username'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        user = User.objects.get(email=email)
+        # Fetch user based on email and username
+        user = User.objects.get(email=email, username=username)
+
+        # Generate a token using default_token_generator
         token = default_token_generator.make_token(user)
-        reset_linkk = construct_frontend_url(reverse('reset_password')) + f'?token={token}&email={email}'
-        reset_link = reset_linkk.replace('/core', '')
+
+               # Construct reset link with reverse and remove /core/api/
+        reset_linkk = construct_frontend_url(reverse('reset_password')) + f'?token={token}'
+        reset_link = reset_linkk.replace('/core/api', '')
 
 
+        
+        # Send email with reset link
         send_mail(
-            'Password Reset',
-            f'Click the link to reset your password: {reset_link}',
+            'PASSWORD RESET',
+            f'Dear {username}, we have received a request to reset your password. Click the link to reset your password: {reset_link}',
             settings.DEFAULT_FROM_EMAIL,
             [email],
             fail_silently=False,
         )
 
-        return Response({'detail': 'Password reset link has been sent to your email.'}, status=status.HTTP_200_OK)
+        return JsonResponse({'detail': 'Password reset link has been sent to your email.'}, status=status.HTTP_200_OK)
     except User.DoesNotExist:
-        return Response({'detail': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-
+        return JsonResponse({'detail': 'User with this email and username combination does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        logger.error(f'Error sending password reset email: {str(e)}')
+        return JsonResponse({'detail': 'An error occurred while sending the password reset link.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def reset_password(request):

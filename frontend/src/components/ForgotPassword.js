@@ -3,17 +3,23 @@ import axios from 'axios';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
-        setEmail(e.target.value);
+        const { name, value } = e.target;
+        if (name === 'email') {
+            setEmail(value);
+        } else if (name === 'username') {
+            setUsername(value);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/core/api/forgot-password/', { email });
+            const response = await axios.post('http://localhost:8000/core/api/forgot-password/', { email, username });
             setMessage('Password reset link has been sent to your email.');
             setError('');
         } catch (error) {
@@ -34,6 +40,16 @@ const ForgotPassword = () => {
                         id="email"
                         name="email"
                         value={email}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="username">Username:</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={username}
                         onChange={handleChange}
                     />
                 </div>
