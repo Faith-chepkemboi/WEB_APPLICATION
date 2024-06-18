@@ -32,7 +32,7 @@ const ChangePasswordForm = ({ onSuccess }) => {
         try {
             const response = await axios.post('http://localhost:8000/core/api/changePassword/', passwordData, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }
             });
             console.log('Password changed successfully:', response.data);

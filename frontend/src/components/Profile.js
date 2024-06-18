@@ -13,7 +13,7 @@ const Profile = () => {
             try {
                 const response = await axios.get('http://localhost:8000/core/api/profile/', {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                     },
                 });
                 setUserProfile(response.data);

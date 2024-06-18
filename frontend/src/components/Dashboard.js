@@ -72,7 +72,7 @@ const Dashboard = () => {
         try {
             await axios.delete('http://localhost:8000/core/api/deleteProfile/', {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }
             });
             localStorage.removeItem('accessToken');

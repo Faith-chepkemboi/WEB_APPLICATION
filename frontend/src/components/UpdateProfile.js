@@ -50,7 +50,7 @@ const UpdateProfile = () => {
     try {
       const response = await axios.put('http://localhost:8000/core/api/updateProfile/', formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       });
 
