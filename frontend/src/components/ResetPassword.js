@@ -47,39 +47,43 @@ const ResetPassword = () => {
             setSuccessMessage(response.data.detail);
             setError('');
         } catch (error) {
-            setError('Error resetting password. Please try again.');
+            setError('Error resetting password. Please try again with the right credentials.');
         }
     };
 
     return (
-        <div className="reset-password-container">
-            <h2>Reset Password</h2>
-            {error && <div className="error-message">{error}</div>}
-            {successMessage && <div className="success-message">{successMessage}</div>}
+        <div style={{ maxWidth: '500px', margin: 'auto', padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Reset Password</h2>
+            <div style={{ marginBottom: '10px' }}>
+                {error && <div style={{ marginBottom: '10px', color: 'red' }}>{error}</div>}
+                {successMessage && <div style={{ marginBottom: '10px', color: 'green' }}>{successMessage}</div>}
+            </div>
             <form onSubmit={handleResetPassword}>
-                <div className="form-group">
-                    <label htmlFor="newPassword">New Password:</label>
+                <div style={{ marginBottom: '10px' }}>
+                    <label htmlFor="newPassword" style={{ display: 'block', marginBottom: '5px' }}>New Password:</label>
                     <input
                         type="password"
                         id="newPassword"
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleInputChange}
+                        style={{ width: '100%', padding: '8px', fontSize: '14px' }}
                         required
                     />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="repeatNewPassword">Repeat New Password:</label>
+                <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="repeatNewPassword" style={{ display: 'block', marginBottom: '5px' }}>Repeat New Password:</label>
                     <input
                         type="password"
                         id="repeatNewPassword"
                         name="repeatNewPassword"
                         value={formData.repeatNewPassword}
                         onChange={handleInputChange}
+                        style={{ width: '100%', padding: '8px', fontSize: '14px' }}
                         required
                     />
                 </div>
-                <button type="submit" className="btn">
+                <button type="submit" style={{ padding: '10px 20px', fontSize: '16px', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>
                     Reset Password
                 </button>
             </form>
