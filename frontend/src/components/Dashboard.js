@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+// src/components/Dashboard.js
+
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import { Menu } from '@mui/icons-material';
-import { AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { AppBar, Toolbar, Drawer, List, ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUser, faEdit, faTrashAlt, faKey } from '@fortawesome/free-solid-svg-icons';
+import { AuthContext } from '../context/AuthContext';
 
 const DashboardContainer = styled('div')({
     backgroundPosition: 'center',
@@ -58,6 +61,15 @@ const ListItemIconStyled = styled(ListItemIcon)({
 const Dashboard = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const history = useHistory();
+    // const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('accessToken');
+        if (!token) {
+            alert('Please log in to access the dashboard.');
+            history.push('/');
+        }
+    }, [ history]);
 
     const toggleDrawer = () => {
         setDrawerOpen(!drawerOpen);
@@ -75,8 +87,9 @@ const Dashboard = () => {
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }
             });
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('refreshToken');
+            // setIsAuthenticated(false);
             history.push('/');
         } catch (error) {
             console.error('Error deleting profile:', error);

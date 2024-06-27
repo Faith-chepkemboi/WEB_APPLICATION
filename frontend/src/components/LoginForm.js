@@ -6,7 +6,7 @@ import '../style.css'; // Import your CSS file with correct path
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
-    const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
+    const [rememberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState({});
     const history = useHistory();
 
@@ -25,12 +25,10 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8000/core/api/token/', formData);
-            console.log("response",response)
             const accessToken = response.data.access;
 
             // Decode the access token
             const decodedToken = jwtDecode(accessToken);
-            console.log("decoded token",decodedToken)
 
             // Check if the decoded email matches the form data email
             if (decodedToken.email !== formData.email) {
@@ -47,10 +45,8 @@ const LoginForm = () => {
             // Save tokens to localStorage if "Remember Me" is checked
             if (rememberMe) {
                 localStorage.setItem('accessToken', accessToken);
-                // Optionally store a refresh token as well
             } else {
                 sessionStorage.setItem('accessToken', accessToken);
-                // Optionally store a refresh token in sessionStorage
             }
 
             // Clear any previous errors

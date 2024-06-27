@@ -1,23 +1,22 @@
-// PrivateRoute.js
-
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = !!localStorage.getItem('accessToken');  // Check if token exists
-
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-        )
-      }
-    />
-  );
+    return (
+        <Route
+            {...rest}
+            render={(props) => {
+                const token = sessionStorage.getItem('accessToken');
+                if (!token) {
+                    // If no token, redirect to the login page
+                    return <Redirect to="/" />;
+                } else {
+                    // If token exists, render the requested component
+                    return <Component {...props} />;
+                }
+            }}
+        />
+    );
 };
 
 export default PrivateRoute;

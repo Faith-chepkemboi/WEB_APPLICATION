@@ -83,6 +83,7 @@ def update_user_profile(request):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
+
 def delete_user_profile(request):
     user = request.user
     user.delete()
