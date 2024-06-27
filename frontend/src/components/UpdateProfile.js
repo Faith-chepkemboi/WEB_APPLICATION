@@ -3,6 +3,7 @@ import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import { Button, TextField, Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa'; // Importing back arrow icon from react-icons
 
 const FormContainer = styled('div')({
   backgroundColor: '#fff',
@@ -27,6 +28,17 @@ const StyledTextField = styled(TextField)({
 const SubmitButton = styled(Button)({
   backgroundColor: '#3cc5ca', // Light blue color
   color: '#fff',
+  '&:hover': {
+    backgroundColor: '#1ea6ab', // Darker shade of blue on hover
+  },
+});
+
+const BackButton = styled(Button)({
+  display: 'flex',
+  alignItems: 'center',
+  backgroundColor: 'green', // Light blue color
+  color: '#fff',
+  marginBottom: '20px',
   '&:hover': {
     backgroundColor: '#1ea6ab', // Darker shade of blue on hover
   },
@@ -64,8 +76,15 @@ const UpdateProfile = () => {
     }
   };
 
+  const handleBackClick = () => {
+    history.push('/dashboard');
+  };
+
   return (
     <FormContainer>
+      <BackButton onClick={handleBackClick}>
+        <FaArrowLeft style={{ marginRight: '5px' }} /> Back to Dashboard
+      </BackButton>
       <FormTitle>Update Profile</FormTitle>
       <form onSubmit={handleSubmit}>
         <StyledTextField

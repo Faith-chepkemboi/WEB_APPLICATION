@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Snackbar } from '@mui/material';
+import { FaArrowLeft } from 'react-icons/fa'; // Importing back arrow icon from react-icons
+import { useHistory } from 'react-router-dom';
 
 const ChangePasswordForm = ({ onSuccess }) => {
     const [passwordData, setPasswordData] = useState({
@@ -11,6 +13,8 @@ const ChangePasswordForm = ({ onSuccess }) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+    const history = useHistory();
 
     const handleChange = (e) => {
         setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
@@ -38,8 +42,10 @@ const ChangePasswordForm = ({ onSuccess }) => {
             console.log('Password changed successfully:', response.data);
             setSnackbarSeverity('success');
             setSnackbarMessage('Password changed successfully!');
+           
             setSnackbarOpen(true);
             onSuccess(); // Call the onSuccess callback provided by parent component
+            history.push('/dashboard');
         } catch (error) {
             console.error('Error changing password:', error.response.data.detail);
             if (error.response.status === 400 && error.response.data.detail === 'Current password is incorrect.') {
@@ -53,49 +59,66 @@ const ChangePasswordForm = ({ onSuccess }) => {
         }
     };
 
+    const handleBackClick = () => {
+        history.push('/dashboard');
+    };
+
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                type="password"
-                label="Old Password"
-                name="oldPassword"
-                value={passwordData.oldPassword}
-                onChange={handleChange}
-                required
-                fullWidth
-                margin="normal"
-            />
-            <TextField
-                type="password"
-                label="New Password"
-                name="newPassword"
-                value={passwordData.newPassword}
-                onChange={handleChange}
-                required
-                fullWidth
-                margin="normal"
-            />
-            <TextField
-                type="password"
-                label="Repeat New Password"
-                name="repeatNewPassword"
-                value={passwordData.repeatNewPassword}
-                onChange={handleChange}
-                required
-                fullWidth
-                margin="normal"
-            />
-            <Button type="submit" variant="contained" color="primary">
-                Change Password
+        <div>
+            <Button 
+                onClick={handleBackClick} 
+                variant="contained" 
+                style={{ 
+                    backgroundColor: 'green', 
+                    color: 'white', 
+                    marginBottom: '20px' 
+                }}
+            >
+                <FaArrowLeft style={{ marginRight: '5px' }} /> Back to Dashboard
             </Button>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-            />
-        </form>
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    type="password"
+                    label="Old Password"
+                    name="oldPassword"
+                    value={passwordData.oldPassword}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    type="password"
+                    label="New Password"
+                    name="newPassword"
+                    value={passwordData.newPassword}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    type="password"
+                    label="Repeat New Password"
+                    name="repeatNewPassword"
+                    value={passwordData.repeatNewPassword}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    margin="normal"
+                />
+                <Button type="submit" variant="contained" color="primary">
+                    Change Password
+                </Button>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleCloseSnackbar}
+                    message={snackbarMessage}
+                    severity={snackbarSeverity}
+                />
+            </form>
+        </div>
     );
 };
 
