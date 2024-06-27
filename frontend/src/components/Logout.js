@@ -10,8 +10,8 @@ const Logout = () => {
         console.log("useEffect called in Logout");
 
         // Clear tokens from localStorage
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
         console.log("Tokens removed");
 
         // Redirect to login page
